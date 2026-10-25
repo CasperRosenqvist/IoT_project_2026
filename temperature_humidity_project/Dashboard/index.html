@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Environmental Monitor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>IoT Environmental Monitor</h1>
+        <div class="cards">
+            <div class="card">
+                <h3>TEMPERATURE</h3>
+                <p class="value"><span id="temp-value">--</span> °C</p>
+            </div>
+
+            <div class="card">
+                <h3>HUMIDITY</h3>
+                <p class="value"><span id="hum-value">--</span> %</p>
+            </div>
+        </div>
+
+        <h2>History</h2>
+        <div id="chart_div"></div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

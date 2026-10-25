@@ -1,0 +1,3 @@
+WIFI_SSID = "Deco X10_guest"
+WIFI_PASS = "Posankka123+"
+WRITE_API_KEY = "K23053BJ63C7V3KC"
