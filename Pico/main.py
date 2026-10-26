@@ -18,10 +18,9 @@ TEMP_MAX = 25.0  # °C (too hot limit)
 HUM_MIN = 30.0   # % (too dry limit)
 HUM_MAX = 70.0   # % (too humid limit)
 
-# Ota Pico W:n sisäinen LED käyttöön
 led = machine.Pin("LED", machine.Pin.OUT)
 
-# Vilkuta 3 kertaa käynnistyksen merkiksi
+# Blink onboard LED 3 times on startup
 for _ in range(3):
     led.value(1)
     time.sleep(0.4)
@@ -49,23 +48,23 @@ def send_data(temp, hum):
         print("ThingSpeak response:", resp_text)
         response.close()
         
-        # Tarkistetaan, oliko vastaus '0' (liian tiheä lähetys tms.)
+        # Check if ThingSpeak returned '0' (rate limit exceeded or too frequent updates)
         if resp_text.strip() == "0":
             print("Notice: ThingSpeak returned '0' (rate limit or similar).")
-            # Välähtää vain kerran 1 sekunnin ajan
+            # Flash error LED once for 1 second
             error_led.value(1)
             time.sleep(1)
             error_led.value(0)
         else:
-            # Onnistunut lähetys -> Sisäinen ledi välähtää
+            # Successful send -> flash onboard LED briefly
             led.value(1)
             time.sleep(0.5)
             led.value(0)
-            error_led.value(0)  # Varmistetaan, että virhevalo on sammuksissa
+            error_led.value(0)  # Ensure error LED is turned off
             
     except Exception as e:
         print("Send error:", e)
-        # Vakava virhe -> Vilkutetaan keltaista lediä muutaman kerran varoitukseksi
+        # Critical error -> flash error LED 5 times as a warning
         for _ in range(5):
             error_led.value(1)
             time.sleep(0.2)
@@ -92,8 +91,8 @@ try:
         time.sleep(300)  # Wait for 5 minutes before next reading
 
 except KeyboardInterrupt:
-    # Tämä ajetaan, kun pysäytät koodin (esim. Ctrl+C tai pysäytysnappi)
-    print("Ohjelma pysäytetty. Sammutetaan ledit...")
+    # Executed when stopping the script (e.g. Ctrl+C)
+    print("Program stopped. Turning off LEDs...")
     red_led.value(0)
     error_led.value(0)
     led.value(0)

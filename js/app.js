@@ -2,6 +2,7 @@ const CHANNEL_ID = "3549174";
 const READ_API_KEY = "IXUMHJPQHUFC0RZP";
 const API_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=200`;
 
+// Define threshold limits for warnings
 const TEMP_MIN = 20.0;
 const TEMP_MAX = 25.0;
 const HUM_MIN = 30.0;
@@ -26,7 +27,7 @@ async function fetchAndDrawChart() {
             const tempVal = latest.field1 ? parseFloat(latest.field1) : NaN;
             const humVal = latest.field2 ? parseFloat(latest.field2) : NaN;
 
-            // --- LÄMPÖTILAN PÄIVITYS JA KYNNYSARVOTARKISTUS ---
+            // --- TEMPERATURE UPDATE AND THRESHOLD CHECK ---
             const tempElement = document.getElementById("temp-value");
             if (tempElement) {
                 if (!isNaN(tempVal)) {
@@ -41,7 +42,7 @@ async function fetchAndDrawChart() {
                 }
             }
 
-            // --- KOSTEUDEN PÄIVITYS JA KYNNYSARVOTARKISTUS ---
+            // --- HUMIDITY UPDATE AND THRESHOLD CHECK ---
             const humElement = document.getElementById("hum-value");
             if (humElement) {
                 if (!isNaN(humVal)) {
@@ -61,7 +62,10 @@ async function fetchAndDrawChart() {
 
         feeds.forEach(feed => {
             const dateObj = new Date(feed.created_at);
-            const timeStr = dateObj.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+            // Include both date and time (e.g. "26.10. 11:25") for clear history tracking
+            const timeStr = dateObj.toLocaleDateString('fi-FI', { day: '2-digit', month: '2-digit' }) + ' ' +
+                dateObj.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+
             const temp = parseFloat(feed.field1) || 0;
             const hum = parseFloat(feed.field2) || 0;
             chartDataArray.push([timeStr, temp, hum]);
@@ -82,9 +86,12 @@ async function fetchAndDrawChart() {
             hAxis: {
                 title: 'Time',
                 titleTextStyle: { color: '#94a3b8' },
-                textStyle: { color: '#94a3b8' },
+                textStyle: { color: '#94a3b8', fontSize: 10 },
                 gridlines: { color: '#334155' },
-                baselineColor: '#334155'
+                baselineColor: '#334155',
+                slantedText: true,
+                slantedTextAngle: 30,
+                showTextEvery: 20 // Show every 20th label to avoid clutter
             },
             vAxis: {
                 title: 'Measurement',

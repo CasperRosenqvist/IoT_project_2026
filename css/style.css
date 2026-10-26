@@ -85,7 +85,6 @@ h2 {
     letter-spacing: -0.03em;
 }
 
-/* Luokka, joka muuttaa tekstin punaiseksi ja tekee siitä hieman näkyvämmän */
 .warning-text {
     color: #ff4d4d !important;
     font-weight: bold;
