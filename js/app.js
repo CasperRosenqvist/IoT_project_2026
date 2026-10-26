@@ -2,7 +2,6 @@ const CHANNEL_ID = "3549174";
 const READ_API_KEY = "IXUMHJPQHUFC0RZP";
 const API_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=200`;
 
-// Define threshold limits for warnings
 const TEMP_MIN = 20.0;
 const TEMP_MAX = 25.0;
 const HUM_MIN = 30.0;
