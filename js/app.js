@@ -1,8 +1,7 @@
 const CHANNEL_ID = "3549174";
 const READ_API_KEY = "IXUMHJPQHUFC0RZP";
-const API_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=20`;
+const API_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=200`;
 
-// Määritä kynnysarvot varoituksia varten
 const TEMP_MIN = 20.0;
 const TEMP_MAX = 25.0;
 const HUM_MIN = 30.0;
@@ -31,7 +30,7 @@ async function fetchAndDrawChart() {
             const tempElement = document.getElementById("temp-value");
             if (tempElement) {
                 if (!isNaN(tempVal)) {
-                    tempElement.textContent = tempVal.toFixed(1); // Vain pelkkä numero
+                    tempElement.textContent = tempVal.toFixed(1);
                     if (tempVal < TEMP_MIN || tempVal > TEMP_MAX) {
                         tempElement.classList.add('warning-text');
                     } else {
@@ -46,7 +45,7 @@ async function fetchAndDrawChart() {
             const humElement = document.getElementById("hum-value");
             if (humElement) {
                 if (!isNaN(humVal)) {
-                    humElement.textContent = humVal.toFixed(1); // Vain pelkkä numero
+                    humElement.textContent = humVal.toFixed(1);
                     if (humVal < HUM_MIN || humVal > HUM_MAX) {
                         humElement.classList.add('warning-text');
                     } else {
@@ -61,7 +60,8 @@ async function fetchAndDrawChart() {
         const chartDataArray = [['Time', 'Temperature (°C)', 'Humidity (%)']];
 
         feeds.forEach(feed => {
-            const timeStr = new Date(feed.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateObj = new Date(feed.created_at);
+            const timeStr = dateObj.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
             const temp = parseFloat(feed.field1) || 0;
             const hum = parseFloat(feed.field2) || 0;
             chartDataArray.push([timeStr, temp, hum]);
